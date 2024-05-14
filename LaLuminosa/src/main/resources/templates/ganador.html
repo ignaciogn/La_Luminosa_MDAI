@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>LaLuminosa/Resultado</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
+		integridad="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+
+	<style>
+		.col-md-4 {
+			background-color: #7a7a7a;
+		}
+
+		.col-md-4 img {
+			padding: 10%;
+		}
+
+		.col-md-8 {
+
+			border-left: 2px solid black;
+		}
+
+		.card-body {
+			padding: 0;
+
+		}
+
+		.card {
+			border: 2px solid black;
+		}
+
+		.card-body p {
+			font-weight: bold;
+			font-size: 20px;
+		}
+
+		.fondo {
+			width: 100%;
+			height: 100vh;
+			position: absolute;
+		}
+
+		.fondo-ganado {
+			background-image: linear-gradient(to top, #00a600, #0fb80a, #1bc915, #26dc1e, #2fee26);
+		}
+
+		.fondo-noganado {
+			background-image: linear-gradient(to top, #c90000, #d30018, #dc002a, #e4053b, #eb124b);
+		}
+	</style>
+	<audio id="audioGanado" th:src="@{/Recursos/Sonidos/ganador.mp3}" preload="auto"></audio>
+	<audio id="audioPerdido" th:src="@{/Recursos/Sonidos/perdedor.mp3}" preload="auto"></audio>
+</head>
+
+<body>
+
+	<!--HA GANADO-->
+	<!--
+	<div class="ganador" th:if="${tirada.ganado}">
+		<h3>FELICIDADES, HAS GANADO</h3>
+		
+		<div class="apuesta5" th:if="${tirada.apuesta == 5}">
+			<h3>HAS APOSTADO 5$</h3>
+		</div>
+		<div class="apuesta10" th:if="${tirada.apuesta == 10}">
+			<h3>HAS APOSTADO 10$</h3>
+		</div>
+		<div class="apuesta20" th:if="${tirada.apuesta == 20}">
+			<h3>HAS APOSTADO 20$</h3>
+		</div>
+		<div class="apuesta50" th:if="${tirada.apuesta == 50}">
+			<h3>HAS APOSTADO 50$</h3>
+		</div>
+		<div class="apuesta100" th:if="${tirada.apuesta == 100}">
+			<h3>HAS APOSTADO 100$</h3>
+		</div>
+
+		<div>
+			<h3>Tu ganancia es: <span th:text="${tirada.profit}"></span>$</h3>
+		</div>
+		<div>
+			<h3>Tu nuevo saldo es: <span th:text="${partida.usuario.dinero}"></span>$</h3>
+		</div>
+	</div> -->
+
+	<div th:class="${tirada.ganado} ? 'fondo fondo-ganado' : 'fondo fondo-noganado'"></div>
+
+
+	<div class="container d-flex align-items-center justify-content-center" style="height: 100vh;">
+		<div class="card col-xxl-9 ganador text-center shadow-lg bg-body-tertiary rounded" th:if="${tirada.ganado}">
+			<div class="row g-0">
+				<div class="col-md-4 d-flex align-items-center">
+					<img src="../static/Recursos/Fichas/100.png"
+						th:src="@{'/Recursos/Fichas/' + ${tirada.apuesta} + '.png'}" class="img-fluid rounded-start"
+						alt="...">
+				</div>
+				<div class="col-md-8">
+					<div class="card-body">
+						<div class="card-header text-center">
+							<h4 class="display-2">Has ganado!</h4>
+						</div>
+						<div class="apuesta5 mt-4" th:if="${tirada.apuesta == 5}">
+							<p class="card-text">HAS APOSTADO 5 €</p>
+						</div>
+						<div class="apuesta10 mt-4" th:if="${tirada.apuesta == 10}">
+							<p class="card-text">HAS APOSTADO 10 €</p>
+						</div>
+						<div class="apuesta20 mt-4" th:if="${tirada.apuesta == 20}">
+							<p class="card-text">HAS APOSTADO 20 €</p>
+						</div>
+						<div class="apuesta50 mt-4" th:if="${tirada.apuesta == 50}">
+							<p class="card-text">HAS APOSTADO 50 €</p>
+						</div>
+						<div class="apuesta100 mt-4" th:if="${tirada.apuesta == 100}">
+							<p class="card-text">HAS APOSTADO 100 €</p>
+						</div>
+
+						<p class="card-text mt-4" th:text="'Tu ganancia es: ' + ${tirada.profit} + '€'"></p>
+						<p class="card-text mt-4" th:text="'Tu nuevo saldo es: ' + ${partida.usuario.dinero} + ' €'">
+						</p>
+
+						<a th:href="@{/prueba2/{idPartida}(idPartida=${partida.idPartida})}"
+							class="btn btn-primary mb-3 mt-5">VOLVER A JUGAR</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="card col-xxl-9 ganador text-center shadow-lg bg-body-tertiary rounded" th:if="${not tirada.ganado}">
+			<div class="row g-0">
+				<div class="col-md-4 d-flex align-items-center">
+
+					<img src="../static/Recursos/Fichas/100.png"
+						th:src="@{'/Recursos/Fichas/' + ${tirada.apuesta} + '.png'}" class="img-fluid rounded-start"
+						alt="...">
+				</div>
+				<div class="col-md-8">
+					<div class="card-body">
+						<div class="card-header text-center">
+							<h4 class="display-2">Has perdido!</h4>
+						</div>
+						<!-- <h5 class="card-title">Lo siento, no has ganado esta vez</h5> -->
+						<!-- GANANCIAS O PERDIDAS -->
+						<div class="apuesta5 mt-5" th:if="${tirada.apuesta == 5}">
+							<p class="card-text">HAS PERDIDO 5 €</p>
+						</div>
+						<div class="apuesta10 mt-5" th:if="${tirada.apuesta == 10}">
+							<p class="card-text">HAS PERDIDO 10 €</p>
+						</div>
+						<div class="apuesta20 mt-5" th:if="${tirada.apuesta == 20}">
+							<p class="card-text">HAS PERDIDO 20 €</p>
+						</div>
+						<div class="apuesta50 mt-5" th:if="${tirada.apuesta == 50}">
+							<p class="card-text">HAS PERDIDO 50 €</p>
+						</div>
+						<div class="apuesta100 mt-5" th:if="${tirada.apuesta == 100}">
+							<p class="card-text">HAS PERDIDO 100 €</p>
+						</div>
+
+						<p class="card-text mt-5" th:text="'Tu nuevo saldo es: ' + ${partida.usuario.dinero} + ' €'">
+						</p>
+
+						<a th:href="@{/prueba2/{idPartida}(idPartida=${partida.idPartida})}"
+							class="btn btn-primary mt-5	mb-3">VOLVER A JUGAR</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+
+
+	<!--HA PERDIDO-->
+	<!--<div class="perdedor" th:if="${not tirada.ganado}">
+		<h3>Lo siento, no has ganado esta vez</h3>
+		<div class="apuesta5" th:if="${tirada.apuesta == 5}">
+			<h3>HAS PERDIDO 5$</h3>
+		</div>
+		<div class="apuesta10" th:if="${tirada.apuesta == 10}">
+			<h3>HAS PERDIDO 10$</h3>
+		</div>
+		<div class="apuesta20" th:if="${tirada.apuesta == 20}">
+			<h3>HAS PERDIDO 20$</h3>
+		</div>
+		<div class="apuesta50" th:if="${tirada.apuesta == 50}">
+			<h3>HAS PERDIDO 50$</h3>
+		</div>
+		<div class="apuesta100" th:if="${tirada.apuesta == 100}">
+			<h3>HAS PERDIDO 100$</h3>
+		</div>
+
+		<div>
+			<h3>Tu nuevo saldo es: <span th:text="${partida.usuario.dinero}"></span>$</h3>
+		</div>
+	</div> -->
+
+	<!--<div class="card mb-3" style="max-width: 540px;">
+		<div class="row g-0">
+			<div class="col-md-4">
+				<img src="../static/Recursos/Fichas/100.png" class="img-fluid rounded-start" alt="...">
+			</div>
+			<div class="col-md-8">
+				<div class="card-body">
+					<h5 class="card-title">¡HAS GANADO!</h5>
+					<p class="card-text">Apuesta: 100€</p>
+					<p class="card-text">Ganancia: 200€</p>
+					<p class="card-text"><small class="text-muted">Tu nuevo saldo es: 900 €</small></p>
+					<a href="" class="btn btn-primary">VOLVER A JUGAR</a>
+				</div>
+			</div>
+		</div>
+	</div> -->
+
+
+
+
+
+
+	<!-- <a th:href="@{/prueba2/{idPartida}(idPartida=${partida.idPartida})}">VOLVER A JUGAR</a> -->
+</body>
+<script th:inline="javascript">
+	var ganado = /*[[${tirada.ganado}]]*/ false;
+	console.log("Ganado: "+ganado);
+	var audioGanado = document.getElementById('audioGanado');
+	var audioPerdido = document.getElementById('audioPerdido');
+
+	// Verifica si la tirada fue ganada o perdida y reproduce el audio correspondiente
+	if (ganado) {
+		audioGanado.play();
+	} else {
+		audioPerdido.play();
+	}
+</script>
+
+</html>

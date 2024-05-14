@@ -1,0 +1,270 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>LaLuminosa/PaginaPrincipal</title>
+	<link rel="stylesheet" href="../static/Css/principal.css" th:href="@{/Css/principal.css}">
+	<link href="https://fonts.googleapis.com/css?family=Titillium+Web" rel="stylesheet">
+
+
+
+
+	<style>
+		body {
+			font-family: 'Titillium Web', sans-serif;
+		}
+
+
+		.rojo {
+			background-color: #ff1000;
+		}
+
+		.negro {
+			background-color: #2D3035;
+		}
+
+		.verde {
+			background-color: #00dd56;
+		}
+
+		.azul {
+			background-color: rgb(12, 12, 192);
+		}
+
+		.lila {
+			background-color: #df7900;
+			;
+		}
+
+		.rojo,
+		.verde,
+		.negro,
+		.azul,
+		.lila {
+			box-shadow: inset 0 0 7px 3px #666666;
+		}
+
+		#tablero_Juego {
+			font-size: 40px;
+			border-collapse: collapse;
+			margin: 0 auto;
+
+		}
+
+		#tablero_Juego td {
+			color: #e3e3e3;
+			width: 75px;
+			height: 75px;
+			border: 3px solid #ddd;
+			text-align: center;
+		}
+
+		#tablero_Juego th,
+		#tablero_Juego td {
+			padding: 15px;
+		}
+
+		.medio {
+			display: flex;
+			width: 100%;
+		}
+
+		.listaTiradas {
+			width: 20%;
+			background-color: aliceblue;
+			margin: 0 10px;
+			overflow-y: auto;
+			max-height: 370px
+		}
+
+		#tablero {
+			width: 60%;
+		}
+
+		.botonJuego {
+			width: 20%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+
+
+		.abajo {
+			display: flex;
+		}
+
+		#botonReseteo {
+			width: 20%;
+			margin: 65px 10px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.listaTiradas table {
+			width: 100%;
+			text-align: center;
+		}
+
+		.tablaTirada {
+			border-collapse: collapse;
+
+		}
+
+		.tablaTirada th,
+		.tablaTirada td {
+			border: 1px solid black;
+			padding: 8px;
+			width: 25%;
+		}
+
+		.tablaTirada th {
+			color: white;
+			background-color: #4a4a4a;
+		}
+	</style>
+
+	<script>
+
+
+	</script>
+
+</head>
+
+<body>
+
+	<header>
+		<div class="imagen_logo">
+			<img src="../static/Recursos/laluminosa_sinfondo.png" alt="logo de la página"
+				th:src="@{/Recursos/laluminosa_sinfondo.png}">
+		</div>
+		<div id="saldo">
+			<p>SALDO: <span th:text="${partida.usuario.dinero}"></span>€</p>
+		</div>
+		<div id="profit">
+			<p>PROFIT: 0€</p>
+		</div>
+		<div class="imagen_out">
+			<a href="/login"><img src="../static/Recursos/salida.png" th:src="@{/Recursos/salida.png}" alt="icono de salida"></a>
+		</div>
+	</header>
+	<div class="contenedor">
+
+
+		<div class="ruleta">
+			<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+			<script th:src="@{/JS/principal.js}"></script>
+			<div class='roulette-wrapper'>
+				<div class='selector'></div>
+				<div class='wheel'></div>
+			</div>
+
+		</div>
+
+		<div class="medio">
+
+			<div class="listaTiradas">
+
+				<th:block th:if="${partida != null}">
+					<table class="tablaTirada">
+						<thead>
+							<tr>
+								<th>Tirada</th>
+								<th>Apuesta</th>
+								<th>Resultado</th>
+								<th>Profit</th>
+								<th>Último Número</th>
+							</tr>
+						</thead>
+						<tbody>
+							<!-- Itera sobre la lista de Tiradas en la Partida -->
+							<tr th:each="tirada : ${partida.tiradas}">
+								<!-- Muestra los atributos de cada Tirada en las columnas -->
+								<td th:text="${tirada.idTirada}"></td>
+								<td th:text="${tirada.apuesta}"></td>
+								<td th:text="${tirada.ganado ? 'Victoria' : 'Derrota'}"></td>
+								<td th:text="${tirada.profit}"></td>
+								<td th:text="${tirada.numeroRuleta}"></td>
+							</tr>
+						</tbody>
+					</table>
+				</th:block>
+
+			</div>
+
+			<div id="tablero">
+
+				<table id="tablero_juego">
+					<tbody>
+						<tr th:each="fila : ${partida.tablero.tablero}">
+							<td th:each="celda : ${fila}" th:class="${celda.color.toLowerCase()}" ondrop="drop(event)"
+								ondragover="allowDrop(event)">
+								<span th:text="${celda.valor}" draggable="true" ondragstart="drag(event)"></span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+			</div>
+
+			<div class="botonJuego">
+				<!--<input placeholder='outcome'> -->
+				<button id="jugar">
+					<span class="button_lg">
+						<span class="button_sl"></span>
+						<span class="button_text">Jugar</span>
+					</span>
+				</button>
+			</div>
+
+
+		</div>
+		<div class="abajo">
+
+			<!--<div id="botonReseteo">
+				<button type="button" onclick="resetearFicha()">Resetear Fichas</button>
+			</div> -->
+			<button class="button" id="botonReseteo" onclick="resetearFicha()">
+				<img src="../static/Recursos/reset.png" th:src="@{/Recursos/reset.png}">
+				<span class="lable">Resetear Fichas</span>
+			</button>
+			<div class="fichas">
+
+				<div id="f5">
+					<img th:src="@{'/Recursos/Fichas/' + ${partida.fichas[0].valor + '.png'}}" alt="Imagen de la ficha"
+						draggable="true" ondragstart="drag(event)" id="ficha5" />
+				</div>
+				<div id="f10">
+					<img th:src="@{'/Recursos/Fichas/' + ${partida.fichas[1].valor + '.png'}}" alt="Imagen de la ficha"
+						draggable="true" ondragstart="drag(event)" id="ficha10" />
+				</div>
+				<div id="f20">
+					<img th:src="@{'/Recursos/Fichas/' + ${partida.fichas[2].valor + '.png'}}" alt="Imagen de la ficha"
+						draggable="true" ondragstart="drag(event)" id="ficha20" />
+				</div>
+				<div id="f50">
+					<img th:src="@{'/Recursos/Fichas/' + ${partida.fichas[3].valor + '.png'}}" alt="Imagen de la ficha"
+						draggable="true" ondragstart="drag(event)" id="ficha50" />
+				</div>
+				<div id="f100">
+					<img th:src="@{'/Recursos/Fichas/' + ${partida.fichas[4].valor + '.png'}}" alt="Imagen de la ficha"
+						draggable="true" ondragstart="drag(event)" id="ficha100" />
+				</div>
+
+			</div>
+		</div>
+
+
+	</div>
+
+	<div id="prueba" th:class="${partida.idPartida}"></div>
+	<footer>
+
+	</footer>
+
+</body>
+
+
+</html>
